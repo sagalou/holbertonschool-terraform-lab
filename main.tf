@@ -1,14 +1,15 @@
 resource "docker_image" "nginx" {
-  name         = "nginx:1.27-alpine"
+  name         = var.image_name
   keep_locally = true
 }
 
 resource "docker_container" "web" {
-  name  = "devops-lab-web"
-  image = docker_image.nginx.image_id
+  name    = var.container_name
+  image   = docker_image.nginx.image_id
+  restart = "unless-stopped"
 
   ports {
-    internal = 80
-    external = 8080
+    internal = var.internal_port
+    external = var.external_port
   }
 }
